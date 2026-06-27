@@ -2,6 +2,7 @@
 
 import sys
 import traceback
+import os
 
 
 def is_frozen():
@@ -34,8 +35,9 @@ def check_pymobiledevice3():
 
 
 def main():
-
-    print("=== Sempl Activator Pro ===")
+    print("=" * 60)
+    print("   Sempl Activator Pro")
+    print("=" * 60)
     print("Python:", sys.version)
 
     if is_frozen():
@@ -52,18 +54,25 @@ def main():
         sys.exit(1)
 
     try:
-        print("\nЗагрузка PyQt6...")
+        print("\n🖥️ Загрузка PyQt6...")
 
         from PyQt6.QtWidgets import QApplication
+        from PyQt6.QtCore import Qt
         from ui.main_window import MainWindow
 
         print("✅ PyQt6 загружен")
         print("✅ MainWindow загружен")
 
+        # Включаем поддержку высокого DPI
+        QApplication.setHighDpiScaleFactorRoundingPolicy(
+            Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
+        )
+
         app = QApplication(sys.argv)
 
         app.setApplicationName("Sempl Activator Pro")
         app.setOrganizationName("Sempl")
+        app.setApplicationVersion("2.0.0")
 
         window = MainWindow()
         window.show()
@@ -71,6 +80,12 @@ def main():
         print("✅ Окно создано")
 
         sys.exit(app.exec())
+
+    except ImportError as e:
+        print(f"\n❌ Ошибка импорта: {e}")
+        print("Установите PyQt6: pip install PyQt6")
+        input("\nНажмите Enter для выхода...")
+        sys.exit(1)
 
     except Exception:
         print("\n❌ Ошибка запуска приложения:\n")
